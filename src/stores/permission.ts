@@ -5,7 +5,6 @@ import { defineStore } from 'pinia';
 export const usePermissionStore = defineStore('permission', {
   state: () => ({
     roles: [],
-    name: '',
     accessedRoutes: []
   }),
   getters: {
@@ -15,7 +14,6 @@ export const usePermissionStore = defineStore('permission', {
     getUserInfo() {
       return userAPI.getUserInfo().then(({ data }: any) => {
         this.roles = data.roles
-        this.name = data.name
         return data
       })
     },

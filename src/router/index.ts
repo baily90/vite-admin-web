@@ -6,11 +6,17 @@ import { usePermissionStore } from '@/stores/permission'
 export const constantRoutes: RouteRecordRaw[]  = [
   {
     path: '/',
-    name: 'dashboard',
-    component: () => import('@/views/dashboard/index.vue'),
-    meta: {
-      title: '数据面板'
-    }
+    component: () => import('@/layout/index.vue'),
+    children: [
+      {
+        path: '',
+        name: 'dashboard',
+        component: () => import('@/views/dashboard/index.vue'),
+        meta: {
+          title: '数据面板'
+        }
+      },
+    ]
   },
   {
     path: '/login',
@@ -31,22 +37,28 @@ export const constantRoutes: RouteRecordRaw[]  = [
   }
 ]
 
-export const asyncRoutes = [
+export const asyncRoutes: RouteRecordRaw[] = [
   {
-    path: '/home',
-    name: 'home',
-    component: () => import('@/views/home/index.vue'),
-    meta: {
-      title: '首页'
-    }
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('@/views/about/index.vue'),
-    meta: {
-      title: '关于'
-    }
+    path: '/',
+    component: () => import('@/layout/index.vue'),
+    children: [
+      {
+        path: 'home',
+        name: 'home',
+        component: () => import('@/views/home/index.vue'),
+        meta: {
+          title: '首页'
+        }
+      },
+      {
+        path: 'about',
+        name: 'about',
+        component: () => import('@/views/about/index.vue'),
+        meta: {
+          title: '关于'
+        }
+      }
+    ]
   }
 ]
 

@@ -7,7 +7,8 @@ export default [
             code: 200,
             message: "ok",
             data: {
-              token: 'kjahgsdyfhg',
+              token: '@guid',
+              name: '@cname'
             }
         }
     }
@@ -21,8 +22,6 @@ export default [
               message: "ok",
               data: {
                 roles: ['admin'],
-                name: '百里',
-                
               },
           }
       }

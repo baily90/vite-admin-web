@@ -63,9 +63,9 @@ const onSubmit = async(formEl: FormInstance | undefined) => {
 <style lang="less" scoped>
   .container {
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 50%;
-    margin-top: -180px;
+    margin-left: -180px;
     width: 360px;
   }
 </style>
