@@ -18,8 +18,8 @@
 <script setup lang='ts'>
   import { computed } from 'vue';
   import { useRoute } from 'vue-router';
-  import LayoutSidebarItem from './components/LayoutSidebarItem/index.vue';
   import { usePermissionStore } from '@/stores/permission'
+  import LayoutSidebarItem from './components/LayoutSidebarItem/index.vue';
   
   const permissionStore = usePermissionStore()
   
@@ -33,6 +33,6 @@
 
 <style lang='less' scoped>
   .menu {
-    height: 100vh;
+    min-height: 100vh;
   }
 </style>

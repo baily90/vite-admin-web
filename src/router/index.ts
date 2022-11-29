@@ -82,6 +82,7 @@ const router = createRouter({
 // 导航跳转开始
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta?.title as string || '管理后台'
+  NProgress.start();
   const { token } = useUserStore()
   const { roles, getUserInfo, generateRoutes } = usePermissionStore()
   if (token) {
@@ -98,7 +99,6 @@ router.beforeEach(async (to, from, next) => {
           next(to.fullPath)
         })
       }else {
-        NProgress.start()
         next()
       }
     }
@@ -106,7 +106,6 @@ router.beforeEach(async (to, from, next) => {
     if (to.path !== '/login') {
       next('/login') 
     }else {
-      NProgress.start()
       next()
     }
   }

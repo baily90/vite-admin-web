@@ -1,71 +1,152 @@
 <template>
   <div class="container">
-    <el-form 
-      ref="formRef"
-      :model="form" 
-      :rules="rules" >
+    <div class="login-box">
+      <!-- 左边图片 -->
+      <div class="login-left">
+				<img src="@/assets/images/login_left.png" alt="login" />
+			</div>
+      
+      <div class="login-form">
+        <!-- 吉祥物 模仿掘金 -->
+        <div class="mascot" :class="{'input' :mascotType === 1, 'secret': mascotType === 2}"></div>
 
-      <el-form-item
-        prop="username" >
-        <el-input 
-          placeholder="username" 
-          v-model="form.username" />
-      </el-form-item>
+        <!-- 登录logo -->
+        <div class="login-logo">
+					<h2 class="logo-text">Vite-Admin-Web</h2>
+				</div>
 
-      <el-form-item
-        prop="password">
-        <el-input 
-          placeholder="password" 
-          v-model="form.password" 
-          show-password />
-      </el-form-item>
+        <!-- 登录表单 -->
+        <el-form 
+          ref="loginFormRef"
+          :model="loginForm" 
+          :rules="loginRules" 
+          size="large" >
 
-      <el-form-item>
-        <el-button 
-          type="primary" 
-          @click="onSubmit(formRef)" >login</el-button>
-      </el-form-item>
+          <el-form-item
+            prop="username" >
+            <el-input 
+              prefix-icon="User"
+              placeholder="用户名：" 
+              v-model="loginForm.username" 
+              @focus="() => {
+                isUsernameFocus = true; 
+                isPasswordFocus = false
+              }" 
+              @blur="() => {
+                isUsernameFocus = false; 
+              }" />
+          </el-form-item>
 
-    </el-form>
+          <el-form-item
+            prop="password">
+            <el-input 
+              prefix-icon="Lock"
+              placeholder="密码：" 
+              v-model="loginForm.password" 
+              show-password  
+              @focus="() => {
+                isUsernameFocus = false; 
+                isPasswordFocus = true
+              }" 
+              @blur="() => {
+                isPasswordFocus = false; 
+              }"  />
+          </el-form-item>
+
+          <div class="login-btn">
+            <el-button 
+              round
+              size="large"
+              icon="Delete"
+              @click="onReset(loginFormRef)" >重置</el-button>
+
+            <el-button 
+              round
+              size="large"
+              type="primary" 
+              icon="UserFilled"
+              :loading="loading"
+              @keyup.enter="onSubmit(loginFormRef)"
+              @click="onSubmit(loginFormRef)"
+               >登录</el-button>
+          </div>
+
+        </el-form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useUserStore } from '@/stores/user'
-import type { FormInstance, FormRules } from 'element-plus';
-import { reactive, ref } from 'vue';
-const { login } = useUserStore()
+  import { computed, onMounted, reactive, ref, toRefs } from 'vue';
+  import { useUserStore } from '@/stores/user'
+  import type { FormInstance, FormRules } from 'element-plus';
 
-const formRef = ref<FormInstance>()
+  interface IState {
+    loading: boolean, 
+    isUsernameFocus: boolean, 
+    isPasswordFocus: boolean, 
+  }
 
-const form = reactive({
-  username: '',
-  password: '',
-})
+  const { login } = useUserStore()
 
-const rules = reactive<FormRules>({
-  username:  { required: true, message: 'usename is required', trigger: 'blur' },
-  password:  { required: true, message: 'password is required', trigger: 'blur' },
-})
+  const loginFormRef = ref<FormInstance>()
 
-const onSubmit = async(formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate((valid) => {
-    if (valid) {
-      login({...form})
-    } else {
-      return false
-    }
+  const loginForm = reactive({
+    username: '',
+    password: '',
   })
-}
+
+  const loginRules = reactive<FormRules>({
+    username:  { required: true, message: '请输入用户名', trigger: 'blur' },
+    password:  { required: true, message: '请输入密码', trigger: 'blur' },
+  })
+
+  const states = reactive<IState>({
+    loading: false, // 登录loading
+    isUsernameFocus: false, // 吉祥物输入状态
+    isPasswordFocus: false, // 吉祥物秘密状态
+  })
+
+  const { loading, isUsernameFocus, isPasswordFocus } = toRefs(states)
+
+  const mascotType = computed(() => {
+    if(isUsernameFocus.value) return 1
+    if(isPasswordFocus.value) return 2
+    return -1
+  })
+
+  onMounted(() => {
+    // 监听enter事件（调用登录）
+    document.onkeydown = (e: any) => {
+      e = window.event || e;
+      if (e.code === "Enter" || e.code === "enter" || e.code === "NumpadEnter") {
+        if (loading.value) return;
+        onSubmit(loginFormRef.value);
+      }
+    };
+  });
+
+
+  const onSubmit = (formEl: FormInstance | undefined) => {
+    formEl?.validate(async (valid) => {
+      if (valid) {
+        loading.value = true
+        await login({...loginForm})
+        loading.value = false
+      } else {
+        return false
+      }
+    })
+  }
+
+  const onReset = (formEl: FormInstance | undefined) => {
+    formEl?.resetFields()
+  }
+
+
 </script>
 
 <style lang="less" scoped>
-  .container {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    margin-left: -180px;
-    width: 360px;
-  }
+  @import "./index.less";
 </style>

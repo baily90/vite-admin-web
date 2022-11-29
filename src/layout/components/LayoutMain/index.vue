@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar>
-    <Transition name="fade">
+    <Transition name="el-fade-in">
       <RouterView />
     </Transition>
   </el-scrollbar>

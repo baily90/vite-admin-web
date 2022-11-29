@@ -16,7 +16,10 @@
         </el-icon>
         <span>{{ item.meta?.title }}</span>
       </template>
-      <LayoutSidebarItem v-for="child in item.children" :key="child.path" :item="child"
+      <LayoutSidebarItem 
+        v-for="child in item.children" 
+        :key="child.path" 
+        :item="child"
         :base-path="resolvePath(child.path)" />
     </el-sub-menu>
   </div>
@@ -66,9 +69,3 @@
   }
   
 </script>
-
-<style lang='less' scoped>
-  .container {
-    
-  }
-</style>
