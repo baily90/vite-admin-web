@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import NProgress from 'nprogress'
 import { useUserStore } from '@/stores/user'
 import { usePermissionStore } from '@/stores/permission'
+import permissionRouter from './modules/permission.router'
 
 export const constantRoutes: RouteRecordRaw[]  = [
   {
@@ -13,7 +14,8 @@ export const constantRoutes: RouteRecordRaw[]  = [
         name: 'dashboard',
         component: () => import('@/views/dashboard/index.vue'),
         meta: {
-          title: '数据面板'
+          title: '首页面板',
+          icon: 'Watermelon'
         }
       },
     ]
@@ -38,24 +40,34 @@ export const constantRoutes: RouteRecordRaw[]  = [
 ]
 
 export const asyncRoutes: RouteRecordRaw[] = [
+  ...permissionRouter,
   {
-    path: '/',
+    path: '/test',
     component: () => import('@/layout/index.vue'),
+    meta: {
+      title: '测试',
+      icon: 'Coffee',
+      roles: ['admin', 'editor']
+    },
     children: [
       {
-        path: 'home',
-        name: 'home',
-        component: () => import('@/views/home/index.vue'),
+        path: 'test1',
+        name: 'test1',
+        component: () => import('@/views/test/indexAdmin.vue'),
         meta: {
-          title: '首页'
+          title: '测试-管理员',
+          icon: 'GobletFull',
+          roles: ['admin']
         }
       },
       {
-        path: 'about',
-        name: 'about',
-        component: () => import('@/views/about/index.vue'),
+        path: 'test2',
+        name: 'test2',
+        component: () => import('@/views/test/indexEditor.vue'),
         meta: {
-          title: '关于'
+          title: '测试-普通用户',
+          icon: 'GobletFull',
+          roles: ['editor']
         }
       }
     ]
@@ -69,7 +81,7 @@ const router = createRouter({
 
 // 导航跳转开始
 router.beforeEach(async (to, from, next) => {
-  document.title = to.meta?.title || '管理后台'
+  document.title = to.meta?.title as string || '管理后台'
   const { token } = useUserStore()
   const { roles, getUserInfo, generateRoutes } = usePermissionStore()
   if (token) {

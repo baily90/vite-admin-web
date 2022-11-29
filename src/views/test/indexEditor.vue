@@ -1,6 +1,6 @@
 <template>
   <div>
-    home
+    测试页面-普通用户
   </div>
 </template>
 

@@ -4,7 +4,7 @@
       <LayoutSidebar />
     </el-aside>
     <el-container>
-      <el-header>
+      <el-header class="layuout-header">
         <LayoutNavbar />
       </el-header>
       <el-main>
@@ -23,5 +23,8 @@ import LayoutMain from './components/LayoutMain/index.vue'
 <style lang='less' scoped>
   .layout-container {
     height: 100vh;
+    .layuout-header {
+      background-color: #fff;
+    }
   }
 </style>

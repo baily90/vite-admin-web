@@ -1,6 +1,6 @@
 <template>
   <div>
-    about
+    测试页面-管理员
   </div>
 </template>
 
