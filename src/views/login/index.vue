@@ -8,7 +8,11 @@
       
       <div class="login-form">
         <!-- 吉祥物 模仿掘金 -->
-        <div class="mascot" :class="{'input' :mascotType === 1, 'secret': mascotType === 2}"></div>
+        <div class="mascot" >
+          <img v-show="isUsernameFocus" src="@/assets/images/mascot_input.svg" alt="">
+          <img v-show="isPasswordFocus" src="@/assets/images/mascot_secret.svg" alt="">
+          <img v-show="(!isUsernameFocus && !isPasswordFocus)" src="@/assets/images/mascot_welcome.svg" alt="">
+        </div>
 
         <!-- 登录logo -->
         <div class="login-logo">
@@ -30,7 +34,7 @@
               v-model="loginForm.username" 
               @focus="() => {
                 isUsernameFocus = true; 
-                isPasswordFocus = false
+                isPasswordFocus = false;
               }" 
               @blur="() => {
                 isUsernameFocus = false; 
@@ -46,7 +50,7 @@
               show-password  
               @focus="() => {
                 isUsernameFocus = false; 
-                isPasswordFocus = true
+                isPasswordFocus = true;
               }" 
               @blur="() => {
                 isPasswordFocus = false; 
@@ -67,8 +71,7 @@
               icon="UserFilled"
               :loading="loading"
               @keyup.enter="onSubmit(loginFormRef)"
-              @click="onSubmit(loginFormRef)"
-               >登录</el-button>
+              @click="onSubmit(loginFormRef)" >登录</el-button>
           </div>
 
         </el-form>
@@ -78,7 +81,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, onMounted, reactive, ref, toRefs } from 'vue';
+  import { onMounted, reactive, ref, toRefs } from 'vue';
   import { useUserStore } from '@/stores/user'
   import type { FormInstance, FormRules } from 'element-plus';
 
@@ -109,12 +112,6 @@
   })
 
   const { loading, isUsernameFocus, isPasswordFocus } = toRefs(states)
-
-  const mascotType = computed(() => {
-    if(isUsernameFocus.value) return 1
-    if(isPasswordFocus.value) return 2
-    return -1
-  })
 
   onMounted(() => {
     // 监听enter事件（调用登录）

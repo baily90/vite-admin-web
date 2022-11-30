@@ -24,7 +24,8 @@ import LayoutMain from './components/LayoutMain/index.vue'
   .layout-container {
     height: 100vh;
     .layuout-header {
-      border-bottom: solid 1px var(--el-menu-border-color)
+      border-bottom: solid 1px var(--el-menu-border-color);
+      background-color: #fff;
     }
   }
 </style>
